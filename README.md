@@ -163,6 +163,12 @@ File specification is easy. `RSM` file is an regular JSON file where each key is
 }
 ```
 
+# Contributing
+
+Ideas and PR are welcome! Also:
+
+**If you are a Redis SDK client developer** and want to add support for RSM... it should be nice! 
+
 # License
 
 This project is distributed under [BSD license](https://github.com/cr0hn/rsm/blob/master/LICENSE>)
