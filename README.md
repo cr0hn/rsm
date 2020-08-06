@@ -1,4 +1,4 @@
-![RSM logo](https://raw.githubusercontent.com/cr0hn/rsm/master/images/logo-200px.png)
+![RSM logo](https://github.com/cr0hn/rsm/blob/master/images/logo/logo-v2-200px.png)
 
 # `RSM` - Redis Security Map :: hide redis server command to attackers
 
