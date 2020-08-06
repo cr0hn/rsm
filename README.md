@@ -35,14 +35,30 @@ This approach it's oks, but you can improve even more the hardening of your serv
 
 # Build a RSM map
 
-Redis Security Mapper is an small tool for building RSM maps. It creates a map by using random names (UUID) as alias.
+Redis Security Mapper is an small tool for building RSM maps. It creates a map by using random names (UUID) as alias:
+
+```bash
+> rsm create-map
+[*] Building new RSM map
+    -> Saving new RSM map at: '/Users/USER/Documents/Projects/rsm/rsm.json'
+[*] Done 
+```
+
+You can also setup output file:
+
+```bash
+> rsm create-map -o rsm.json
+[*] Building new RSM map
+    -> Saving new RSM map at: 'rsm.json'
+[*] Done 
+```
 
 # Add RSM map to redis.conf
 
 `redis-security-map` allow you to add `RSM` alias in your redis.conf file:
 
 ```bash
-> redis-security-map redis-config  
+> rsm redis-config  
 ```
 
 By default `redis-security-map` will find from running directory a `redis.conf` file and a `rsm.json`. If not `redis.conf` file is found will create new one.
@@ -50,7 +66,7 @@ By default `redis-security-map` will find from running directory a `redis.conf` 
 You also can config custom RSM file and redis.conf file
 
 ```bash
-> redis-security-map -m examples/rsm.json -c examples/redis.conf 
+> rsm -m examples/rsm.json -c examples/redis.conf 
 ```
 
 
