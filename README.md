@@ -18,6 +18,7 @@
   - [Using RSM with py-redis](#using-rsm-with-py-redis)
   - [Using RSM with aioredis](#using-rsm-with-aioredis)
 - [RSM file specification](#rsm-file-specification)
+- [Contributing](#contributing)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
