@@ -1,8 +1,6 @@
 ![RSM logo](https://github.com/cr0hn/rsm/blob/master/images/logo/logo-v2-200px.png)
 
-# `RSM` - Redis Security Map :: hide redis server command to attackers
-
-Only users with the RSM file can exec commands into Redis Server
+# Redis Security Map :: hide redis server command to attackers
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -32,7 +30,7 @@ Only users with the RSM file can exec commands into Redis Server
 
 Any user / application with access to the Redis Server can execute any commands. Redis allows to disable some commands and restrict some commands for specific users (this feature was added in Redis 6).  
 
-Only these users with the RMS map can execute commands into Redis Server. Redis server must start with this RSM map (rsm mappers allows you that).
+This approach it's oks, but you can improve even more the hardening of your server by using `RSM`. Then: Only these users with the RMS map can execute commands into Redis Server. Redis server must start with this RSM map (rsm mappers allows you that).
 
 # Build a RSM map
 
@@ -144,7 +142,26 @@ if __name__ == '__main__':
 
 # RSM file specification
 
+File specification is easy. `RSM` file is an regular JSON file where each key is the Redis Command you want to map and value is the new value. Example:
 
+```json
+{
+  "XREVRANGE": "2a34187406384be59a33008e81c5a92d",
+  "BLPOP": "8075de5f7bb94ab4b7024a857b74d7e3",
+  "HGETALL": "854502babb1f48969cf020e7d79a6c07",
+  "EXEC": "be08715620c242cb88df7a51c827b837",
+  "BITFIELD": "43059bafe0d74db3970605134ab2ee4f",
+  "XINFO": "8c6e90b9834e445bbed1372086e7a499",
+  "LTRIM": "7686c57736d640c5aa387ca098816052",
+  "DBSIZE": "6203f641eeef457fa40bff605cd29d67",
+  "REPLCONF": "d234e97f54ba49ceb8f1ec580e032d87",
+  "HSET": "958b9cb4e4cc4e89b0eccb50d88a5b7e",
+  "SYNC": "01757da1afb3418390a6b28eb02e10fc",
+  "GET": "1f608add63374251bfba8ee05f65c07b",
+  
+  ...
+}
+```
 
 # License
 
