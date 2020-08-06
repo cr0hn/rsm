@@ -1,6 +1,6 @@
 ![RSM logo](https://github.com/cr0hn/rsm/blob/master/images/logo/logo-v2-200px.png)
 
-# Redis Security Map :: hide redis server command to attackers
+# Redis Security Map - hide redis server command to attackers
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
