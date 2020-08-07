@@ -8,6 +8,10 @@
 
 - [What's RSM](#whats-rsm)
 - [Why](#why)
+- [Hacking tools & RSM](#hacking-tools--rsm)
+  - [Launching Redis with RSM](#launching-redis-with-rsm)
+  - [Using nmap](#using-nmap)
+  - [Using Thc-Hydra](#using-thc-hydra)
 - [Build a RSM map](#build-a-rsm-map)
 - [Add RSM map to redis.conf](#add-rsm-map-to-redisconf)
 - [Launch redis with RSM](#launch-redis-with-rsm)
@@ -32,6 +36,112 @@
 Any user / application with access to the Redis Server can execute any commands. Redis allows to disable some commands and restrict some commands for specific users (this feature was added in Redis 6).  
 
 This approach it's oks, but you can improve even more the hardening of your server by using `RSM`. Then: Only these users with the RMS map can execute commands into Redis Server. Redis server must start with this RSM map (rsm mappers allows you that).
+
+# Hacking tools & RSM
+
+`RSM` is a very good approach to invalidate the Redis hacking tools. To demonstrate them we'll use:
+
+- `nmap` with script [redis-info.nse](https://nmap.org/nsedoc/scripts/redis-info.html) and [redis-brute.nse](https://nmap.org/nsedoc/scripts/redis-brute.html)
+- [thc hydra](https://github.com/vanhauser-thc/thc-hydra) with Redis module   
+
+## Launching Redis with RSM
+
+You can follow [Docker section](https://github.com/cr0hn/rsm#docker) to launch a Redis instance with RSM.
+
+Our Redis server now runs in `127.0.0.1` at port `6379`.
+
+## Using nmap
+
+We launch nmap with 2 NSE script trying to discover all our Redis server information:
+
+```bash
+> nmap -Pn -n 127.0.0.1 -p 6379 -A -sC --script "redis-info,redis-brute" -oN redis-rsm-nmap.txt 
+Starting Nmap 7.80 ( https://nmap.org ) at 2020-08-07 11:06 CEST
+Nmap scan report for 127.0.0.1
+Host is up (0.00025s latency).
+
+PORT     STATE SERVICE VERSION
+6379/tcp open  redis?
+| fingerprint-strings:
+|   FourOhFourRequest:
+|     -ERR unknown command `GET`, with args beginning with: `/nice%20ports%2C/Tri%6Eity.txt%2ebak`, `HTTP/1.0`,
+|   GetRequest:
+|     -ERR unknown command `GET`, with args beginning with: `/`, `HTTP/1.0`,
+|   HTTPOptions:
+|     -ERR unknown command `OPTIONS`, with args beginning with: `/`, `HTTP/1.0`,
+|   Help:
+|     -ERR unknown command `HELP`, with args beginning with:
+|   LPDString:
+|     -ERR unknown command `
+|     default`, with args beginning with:
+|   RTSPRequest:
+|     -ERR unknown command `OPTIONS`, with args beginning with: `/`, `RTSP/1.0`,
+|   SIPOptions:
+|     -ERR unknown command `OPTIONS`, with args beginning with: `sip:nm`, `SIP/2.0`,
+|     -ERR unknown command `Via:`, with args beginning with: `SIP/2.0/TCP`, `nm;branch=foo`,
+|     -ERR unknown command `From:`, with args beginning with: `<sip:nm@nm>;tag=root`,
+|     -ERR unknown command `To:`, with args beginning with: `<sip:nm2@nm2>`,
+|     -ERR unknown command `Call-ID:`, with args beginning with: `50000`,
+|     -ERR unknown command `CSeq:`, with args beginning with: `42`, `OPTIONS`,
+|     -ERR unknown command `Max-Forwards:`, with args beginning with: `70`,
+|     -ERR unknown command `Content-Length:`, with args beginning with: `0`,
+|     -ERR unknown command `Contact:`, with args beginning with: `<sip:nm@nm>`,
+|     -ERR unknown command `Accept:`, with args beginning with: `application/sdp`,
+|   redis-server:
+|_    -ERR unknown command `info`, with args beginning with:
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port6379-TCP:V=7.80%I=7%D=8/7%Time=5F2D1988%P=x86_64-apple-darwin19.0.0
+SF:%r(redis-server,39,"-ERR\x20unknown\x20command\x20`info`,\x20with\x20ar
+SF:gs\x20beginning\x20with:\x20\r\n")%r(GetRequest,49,"-ERR\x20unknown\x20
+SF:command\x20`GET`,\x20with\x20args\x20beginning\x20with:\x20`/`,\x20`HTT
+SF:P/1\.0`,\x20\r\n")%r(HTTPOptions,4D,"-ERR\x20unknown\x20command\x20`OPT
+SF:IONS`,\x20with\x20args\x20beginning\x20with:\x20`/`,\x20`HTTP/1\.0`,\x2
+SF:0\r\n")%r(RTSPRequest,4D,"-ERR\x20unknown\x20command\x20`OPTIONS`,\x20w
+SF:ith\x20args\x20beginning\x20with:\x20`/`,\x20`RTSP/1\.0`,\x20\r\n")%r(H
+SF:elp,39,"-ERR\x20unknown\x20command\x20`HELP`,\x20with\x20args\x20beginn
+SF:ing\x20with:\x20\r\n")%r(FourOhFourRequest,6C,"-ERR\x20unknown\x20comma
+SF:nd\x20`GET`,\x20with\x20args\x20beginning\x20with:\x20`/nice%20ports%2C
+SF:/Tri%6Eity\.txt%2ebak`,\x20`HTTP/1\.0`,\x20\r\n")%r(LPDString,3D,"-ERR\
+SF:x20unknown\x20command\x20`\x01default`,\x20with\x20args\x20beginning\x2
+SF:0with:\x20\r\n")%r(SIPOptions,302,"-ERR\x20unknown\x20command\x20`OPTIO
+SF:NS`,\x20with\x20args\x20beginning\x20with:\x20`sip:nm`,\x20`SIP/2\.0`,\
+SF:x20\r\n-ERR\x20unknown\x20command\x20`Via:`,\x20with\x20args\x20beginni
+SF:ng\x20with:\x20`SIP/2\.0/TCP`,\x20`nm;branch=foo`,\x20\r\n-ERR\x20unkno
+SF:wn\x20command\x20`From:`,\x20with\x20args\x20beginning\x20with:\x20`<si
+SF:p:nm@nm>;tag=root`,\x20\r\n-ERR\x20unknown\x20command\x20`To:`,\x20with
+SF:\x20args\x20beginning\x20with:\x20`<sip:nm2@nm2>`,\x20\r\n-ERR\x20unkno
+SF:wn\x20command\x20`Call-ID:`,\x20with\x20args\x20beginning\x20with:\x20`
+SF:50000`,\x20\r\n-ERR\x20unknown\x20command\x20`CSeq:`,\x20with\x20args\x
+SF:20beginning\x20with:\x20`42`,\x20`OPTIONS`,\x20\r\n-ERR\x20unknown\x20c
+SF:ommand\x20`Max-Forwards:`,\x20with\x20args\x20beginning\x20with:\x20`70
+SF:`,\x20\r\n-ERR\x20unknown\x20command\x20`Content-Length:`,\x20with\x20a
+SF:rgs\x20beginning\x20with:\x20`0`,\x20\r\n-ERR\x20unknown\x20command\x20
+SF:`Contact:`,\x20with\x20args\x20beginning\x20with:\x20`<sip:nm@nm>`,\x20
+SF:\r\n-ERR\x20unknown\x20command\x20`Accept:`,\x20with\x20args\x20beginni
+SF:ng\x20with:\x20`application/sdp`,\x20\r\n");
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 162.88 seconds
+```
+ 
+Nmap try to perform some probes, but he really doesn't know what need to do.
+ 
+    You can check download original [redis-rsm-nmap.txt](https://github.com/cr0hn/rsm/blob/master/examples/redis-rsm-nmap.txt).
+
+## Using Thc-Hydra
+
+In the other hands when try to launch Hydra in our Redis-RSM server, hydra doesn't recognize them as a redis server:
+
+```bash
+> hydra -p passwords.txt -o hacked.txt redis://10.10.10.160:6379
+Hydra v9.0 (c) 2019 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes.
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-08-07 08:56:09
+[DATA] max 1 task per 1 server, overall 1 task, 1 login try (l:1/p:1), ~1 try per task
+[DATA] attacking redis://10.10.10.160:6379/
+[ERROR] The server is not redis, exit. 
+```
+
 
 # Build a RSM map
 
