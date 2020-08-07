@@ -126,7 +126,7 @@ Nmap done: 1 IP address (1 host up) scanned in 162.88 seconds
  
 Nmap try to perform some probes, but he really doesn't know what need to do.
  
-    You can check download original [redis-rsm-nmap.txt](https://github.com/cr0hn/rsm/blob/master/examples/redis-rsm-nmap.txt).
+You can check download original [redis-rsm-nmap.txt](https://github.com/cr0hn/rsm/blob/master/examples/redis-rsm-nmap.txt).
 
 ## Using Thc-Hydra
 
