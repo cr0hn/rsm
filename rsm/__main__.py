@@ -104,7 +104,7 @@ def main():
     parsed = parser.parse_args()
 
     if parsed.version:
-        _c = pkg_resources.get_distribution('redis-security-map').version
+        _c = pkg_resources.get_distribution('redis-security-mapper').version
         print(f"version: {_c}")
         print()
         exit()
