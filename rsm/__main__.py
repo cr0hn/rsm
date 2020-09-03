@@ -81,6 +81,8 @@ def main():
         description='RSM - Redis Security Mapper'
     )
     parser.add_argument("--version",
+                        action="store_true",
+                        default=False,
                         help="display RSM mapper version")
 
     subparsers = parser.add_subparsers(dest="action")

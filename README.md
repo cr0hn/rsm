@@ -208,7 +208,7 @@ Redis Security Map integrated support for the two most used libraries in Python:
 First you need to install redis-security-map dependency:
 
 ```bash
-> pip install redis-security-map
+> pip install redis-security-mapper
 ```
 
 ## Using RSM with py-redis
