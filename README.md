@@ -35,7 +35,7 @@
 
 Any user / application with access to the Redis Server can execute any commands. Redis allows to disable some commands and restrict some commands for specific users (this feature was added in Redis 6).  
 
-This approach it's oks, but you can improve even more the hardening of your server by using `RSM`. Then: Only these users with the RMS map can execute commands into Redis Server. Redis server must start with this RSM map (rsm mappers allows you that).
+This approach it's oks, but you can improve even more the hardening of your server by using `RSM`. Then: Only these users with the RSM map can execute commands into Redis Server. Redis server must start with this RSM map (rsm mappers allows you that).
 
 # Hacking tools & RSM
 
@@ -145,7 +145,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-08-07 08:56:
 
 # Build a RSM map
 
-Redis Security Mapper is an small tool for building RSM maps. It creates a map by using random names (UUID) as alias:
+Redis Security Mapper is a small tool for building RSM maps. It creates a map by using random names (UUID) as alias:
 
 ```bash
 > rsm create-map
@@ -269,7 +269,7 @@ if __name__ == '__main__':
 
 # RSM file specification
 
-File specification is easy. `RSM` file is an regular JSON file where each key is the Redis Command you want to map and value is the new value. Example:
+File specification is easy. `RSM` file is a regular JSON file where each key is the Redis Command you want to map and value is the new value. Example:
 
 ```json
 {
@@ -298,4 +298,4 @@ Ideas and PR are welcome! Also:
 
 # License
 
-This project is distributed under [BSD license](https://github.com/cr0hn/rsm/blob/master/LICENSE>)
+This project is distributed under [BSD license](https://github.com/cr0hn/rsm/blob/master/LICENSE)
